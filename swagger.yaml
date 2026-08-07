@@ -1,23 +1,119 @@
 openapi: 3.0.0
+
 info:
-  title: My Node.js API Docs
+  title: Task API
   version: 1.0.0
-  description: API documentation powered by an external YAML file.
+  description: >
+    A simple in-memory Task API built with Node.js and Express.
+    This API supports CRUD operations for managing tasks.
+
 servers:
   - url: http://localhost:3000
+
 paths:
+
   /:
     get:
-      summary: Retrieve home message
-      description: Returns a basic confirmation string that the server works.
+      summary: API Information
+      description: Returns basic information about the Task API.
       responses:
-        '200':
-          description: Success
+        "200":
+          description: API information returned successfully
 
-  /users:
+  /tasks:
     get:
-      summary: Get all users
-      description: Fetches a quick static list of users from the server.
+      summary: Get all tasks
+      description: Returns all tasks from the in-memory task list.
       responses:
-        '200':
-          description: A JSON array of users.
+        "200":
+          description: List of tasks returned successfully
+
+    post:
+      summary: Create a new task
+      description: Adds a new task to the in-memory task list.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                  example: Build Candidate API
+                description:
+                  type: string
+                  example: Create CRUD endpoints for candidates.
+                priority:
+                  type: string
+                  example: High
+                completed:
+                  type: boolean
+                  example: false
+
+      responses:
+        "201":
+          description: Task created successfully
+
+  /tasks/{id}:
+    get:
+      summary: Get a task by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Task found
+        "404":
+          description: Task not found
+
+    put:
+      summary: Update a task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                priority:
+                  type: string
+                completed:
+                  type: boolean
+
+      responses:
+        "200":
+          description: Task updated successfully
+        "404":
+          description: Task not found
+
+    delete:
+      summary: Delete a task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        "200":
+          description: Task deleted successfully
+        "404":
+          description: Task not found
