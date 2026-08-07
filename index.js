@@ -27,7 +27,22 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.get('/tasks', (req, res) => {
+  res.json(tasks);
+});
 
+// GET task by ID
+app.get('/tasks/:id', (req, res) => {
+  const task = tasks.find(t => t.id === Number(req.params.id));
+
+  if (!task) {
+    return res.status(404).json({
+      message: "Task not found"
+    });
+  }
+
+  res.json(task);
+});
 
 
 app.listen(PORT, () => {
