@@ -71,6 +71,30 @@ app.post('/tasks', (req, res) => {
   });
 
 });
+// UPDATE task
+app.put('/tasks/:id', (req, res) => {
+
+  const task = tasks.find(t => t.id === Number(req.params.id));
+
+  if (!task) {
+    return res.status(404).json({
+      message: "Task not found"
+    });
+  }
+
+  const { title, description, priority, completed } = req.body;
+
+  task.title = title ?? task.title;
+  task.description = description ?? task.description;
+  task.priority = priority ?? task.priority;
+  task.completed = completed ?? task.completed;
+
+  res.json({
+    message: "Task updated successfully",
+    task
+  });
+
+});
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
 });
