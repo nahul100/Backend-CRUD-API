@@ -44,7 +44,33 @@ app.get('/tasks/:id', (req, res) => {
   res.json(task);
 });
 
+// CREATE task
+app.post('/tasks', (req, res) => {
 
+  const { title, description, priority, completed } = req.body;
+
+  if (!title) {
+    return res.status(400).json({
+      message: "Title is required"
+    });
+  }
+
+  const newTask = {
+    id: tasks.length ? tasks[tasks.length - 1].id + 1 : 1,
+    title,
+    description: description || "",
+    priority: priority || "Low",
+    completed: completed || false
+  };
+
+  tasks.push(newTask);
+
+  res.status(201).json({
+    message: "Task created successfully",
+    task: newTask
+  });
+
+});
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
 });
