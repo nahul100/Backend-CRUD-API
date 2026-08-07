@@ -89,6 +89,8 @@ JSON Response
    ▼
 Client
 
-## Swagger URL
+## Swagger UI
 
-http://localhost:3000/docs/
+<img width="1685" height="945" alt="Screenshot 2026-08-07 221826" src="https://github.com/user-attachments/assets/e3d27055-b16c-4bbc-a195-1cb6667035c8" />
+
+
