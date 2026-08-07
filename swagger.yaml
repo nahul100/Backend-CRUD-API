@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: My Node.js API Docs
+  version: 1.0.0
+  description: API documentation powered by an external YAML file.
+servers:
+  - url: http://localhost:3000
+paths:
+  /:
+    get:
+      summary: Retrieve home message
+      description: Returns a basic confirmation string that the server works.
+      responses:
+        '200':
+          description: Success
+
+  /users:
+    get:
+      summary: Get all users
+      description: Fetches a quick static list of users from the server.
+      responses:
+        '200':
+          description: A JSON array of users.
