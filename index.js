@@ -95,6 +95,25 @@ app.put('/tasks/:id', (req, res) => {
   });
 
 });
+// DELETE task
+app.delete('/tasks/:id', (req, res) => {
+
+  const index = tasks.findIndex(t => t.id === Number(req.params.id));
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Task not found"
+    });
+  }
+
+  const deletedTask = tasks.splice(index, 1);
+
+  res.json({
+    message: "Task deleted successfully",
+    task: deletedTask[0]
+  });
+
+});
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);
 });
