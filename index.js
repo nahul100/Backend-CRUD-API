@@ -7,7 +7,11 @@ const tasks = require('./MOCK_DATA.json');
 //const openapi = YAML.load('./openapi.yaml');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
+app.use(express.json());
+
 app.use('/docs', swaggerUi.serve,swaggerUi.setup(swaggerDocument));
+
+
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -47,20 +51,19 @@ app.get('/tasks/:id', (req, res) => {
 // CREATE task
 app.post('/tasks', (req, res) => {
 
-  const { title, description, priority, completed } = req.body;
+  const { id,title,done} = req.body;
 
-  if (!title) {
+  if (!id) {
     return res.status(400).json({
-      message: "Title is required"
+      message: "id is required"
     });
   }
 
   const newTask = {
-    id: tasks.length ? tasks[tasks.length - 1].id + 1 : 1,
+   // id: tasks.length ? tasks[tasks.length - 1].id + 1 : 1,
+    id,
     title,
-    description: description || "",
-    priority: priority || "Low",
-    completed: completed || false
+    done
   };
 
   tasks.push(newTask);
@@ -82,12 +85,10 @@ app.put('/tasks/:id', (req, res) => {
     });
   }
 
-  const { title, description, priority, completed } = req.body;
-
+   const { id,title,done} = req.body;
+  task.id = id ?? task.id;
   task.title = title ?? task.title;
-  task.description = description ?? task.description;
-  task.priority = priority ?? task.priority;
-  task.completed = completed ?? task.completed;
+  task.done = done ?? task.done;
 
   res.json({
     message: "Task updated successfully",
