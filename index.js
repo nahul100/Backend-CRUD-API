@@ -84,9 +84,9 @@ app.put('/tasks/:id', (req, res) => {
   }
 
    const { id,title,done} = req.body;
-  task.id = id ?? task.id;
-  task.title = title ?? task.title;
-  task.done = done ?? task.done;
+  task.id = id ;
+  task.title = title ;
+  task.done = done ;
 
   res.json({
     message: "Task updated successfully",
