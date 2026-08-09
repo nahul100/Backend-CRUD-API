@@ -1,4 +1,4 @@
-
+<img width="1080" height="923" alt="Screenshot 2026-08-09 232015" src="https://github.com/user-attachments/assets/42ea1825-87b9-4fa1-aa6b-d9a47b710e3c" />
 # Task API
 
 A simple RESTful Task API built with **Node.js**, **Express.js**, **SQLite**, and **Swagger UI** as part of the FlyRank AI Backend Engineering Internship.
