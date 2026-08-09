@@ -1,4 +1,3 @@
-<img width="1080" height="923" alt="Screenshot 2026-08-09 232015" src="https://github.com/user-attachments/assets/42ea1825-87b9-4fa1-aa6b-d9a47b710e3c" />
 # Task API
 
 A simple RESTful Task API built with **Node.js**, **Express.js**, **SQLite**, and **Swagger UI** as part of the FlyRank AI Backend Engineering Internship.
@@ -44,8 +43,4 @@ This project demonstrates the fundamentals of backend API development, including
 This project uses **SQLite** as its database.
 
 SQLite was chosen for this stage because it is lightweight, requires no separate database server, and stores the application data in a single database file.
-
-The database file is:
-
-```text
-<img width="1080" height="923" alt="Screenshot 2026-08-09 232015" src="https://github.com/user-attachments/assets/044716d7-070a-465c-abfa-26b298fb405f" />
+<img width="1080" height="923" alt="Screenshot 2026-08-09 232015" src="https://github.com/user-attachments/assets/8134ca95-510a-45f5-8287-05928948ee0a" />
