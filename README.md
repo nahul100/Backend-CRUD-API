@@ -10,6 +10,7 @@ This project demonstrates the fundamentals of backend API development, including
 - Full CRUD operations for task management
 - SQLite database for persistent storage
 - Automatic database and table creation
+- Automatic seeding of three example tasks then added task
 - SQL-based data retrieval and modification
 - Interactive API documentation using Swagger UI
 - JSON request and response format
