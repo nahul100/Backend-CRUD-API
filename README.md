@@ -1,96 +1,50 @@
 # Task API
 
-A simple RESTful Task API built with **Node.js**, **Express.js**, and **Swagger UI** as part of the FlyRank AI Backend Engineering Internship.
+A simple RESTful Task API built with **Node.js**, **Express.js**, **SQLite**, and **Swagger UI** as part of the FlyRank AI Backend Engineering Internship.
 
-This project demonstrates the fundamentals of REST API development by implementing CRUD (Create, Read, Update, Delete) operations on an in-memory task list. The API follows REST principles and provides endpoints to create, retrieve, update, and delete tasks.
+This project demonstrates the fundamentals of backend API development, including RESTful CRUD operations, database integration, SQL queries, persistent data storage, and API documentation.
 
 ## Features
 
 - RESTful API built with Express.js
-- CRUD operations for task management
-- In-memory data storage (no database required)
+- Full CRUD operations for task management
+- SQLite database for persistent storage
+- Automatic database and table creation
+- Automatic seeding of three example tasks
+- SQL-based data retrieval and modification
 - Interactive API documentation using Swagger UI
 - JSON request and response format
-- Proper HTTP status codes and error handling
+- HTTP status codes and error handling
+- Database remains available across server restarts
 
 ## Technologies Used
 
 - Node.js
 - Express.js
+- SQLite
+- better-sqlite3
 - Swagger UI Express
-- YAML (Swagger Documentation)
+- YAML / OpenAPI
 
 ## API Endpoints
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
 | GET | `/` | API information |
+| GET | `/health` | Health check |
 | GET | `/tasks` | Retrieve all tasks |
 | GET | `/tasks/{id}` | Retrieve a task by ID |
 | POST | `/tasks` | Create a new task |
 | PUT | `/tasks/{id}` | Update an existing task |
 | DELETE | `/tasks/{id}` | Delete a task |
 
-## Running the Project
+## Database
 
-Install dependencies:
+This project uses **SQLite** as its database.
 
-```bash
-npm install
-```
+SQLite was chosen for this stage because it is lightweight, requires no separate database server, and stores the application data in a single database file.
 
-Start the server:
+The database file is:
 
-```bash
-node index.js
-```
-
-The server will run at:
-
-```
-http://localhost:3000
-```
-
-Swagger documentation is available at:
-
-```
-http://localhost:3000/docs
-```
-
-## Project Structure
-
-```
-Backend-CRUD-api/
-│── index.js
-│── swagger.yaml
-│── package.json
-└── README.md
-```
-## Data Storage
-
-This project stores task data in a local **JSON file (`MOCK_DATA.json`)** instead of a database. The API reads and updates this file during CRUD operations. This approach keeps the project simple while providing hands-on experience with REST API development before introducing a database in later assignments.
-
-## Working Principle of REST API 
-
-Client
-   │
-HTTP Request
-   │
-   ▼
-Express Server
-   │
-Route
-   │
-Business Logic
-   │
- tasks[]
-   │
-JSON Response
-   ▼
-Client
-
-## Swagger UI
-
-<img width="1685" height="945" alt="Screenshot 2026-08-07 221826" src="https://github.com/user-attachments/assets/e3d27055-b16c-4bbc-a195-1cb6667035c8" />
-
-
+```text
+tasks.db<img width="1080" height="923" alt="Screenshot 2026-08-09 232015" src="https://github.com/user-attachments/assets/66d61814-749c-49a5-81d2-ae6ee04bed79" />
