@@ -4,8 +4,8 @@ info:
   title: Task API
   version: 1.0.0
   description: >
-    A simple in-memory Task API built with Node.js and Express.
-    This API supports CRUD operations for managing tasks.
+    "A RESTful Task API built with Node.js, Express.js, and SQLite. 
+     The API supports CRUD operations with persistent task storage."
 
 servers:
   - url: http://localhost:3000
