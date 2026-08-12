@@ -1,26 +1,32 @@
-const Database = require('better-sqlite3');
+const { Pool } = require('pg');
 
-const db = new Database('tasks.db');
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL
+});
 
-db.exec(`
-    CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        done INTEGER DEFAULT 0
-    )
-`);
-
-const count = db.prepare('SELECT COUNT(*) AS count FROM tasks').get();
-
-if (count.count === 0) {
-    const insert = db.prepare(`
-        INSERT INTO tasks (title, done)
-        VALUES (?, ?)
+async function initDatabase() {
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS tasks (
+            id SERIAL PRIMARY KEY,
+            title TEXT NOT NULL,
+            done INTEGER DEFAULT 0
+        )
     `);
 
-    insert.run('Learn Node.js', 0);
-    insert.run('Build CRUD API', 0);
-    insert.run('Connect SQLite database', 0);
+    const result = await pool.query('SELECT COUNT(*) FROM tasks');
+
+    if (Number(result.rows[0].count) === 0) {
+        await pool.query(`
+            INSERT INTO tasks (title, done)
+            VALUES
+                ('Learn Node.js', 0),
+                ('Build CRUD API', 0),
+                ('Connect PostgreSQL database', 0)
+        `);
+    }
 }
 
-module.exports = db;
+module.exports = {
+    pool,
+    initDatabase
+};

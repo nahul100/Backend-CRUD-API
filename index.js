@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const app = express();
 const PORT = 3000;
-const db = require('./db');
+const { pool, initDatabase } = require('./db');
 //const openapi = YAML.load('./openapi.yaml');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
@@ -125,6 +126,12 @@ app.delete('/tasks/:id', (req, res) => {
         task
     });
 });
-app.listen(PORT, () => {
-    console.log(`Server started on http://localhost:${PORT}`);
-});
+initDatabase()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server started on http://localhost:${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error('Database initialization failed:', error);
+    });
