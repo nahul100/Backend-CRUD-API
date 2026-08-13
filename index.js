@@ -30,24 +30,39 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.get('/tasks', (req, res) => {
-    const tasks = db.prepare('SELECT * FROM tasks').all();
-    res.json(tasks);
+app.get('/tasks', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM tasks');
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error reading tasks:', error);
+        res.status(500).json({
+            error: 'Database error'
+        });
+    }
 });
 
 // GET task by ID
-app.get('/tasks/:id', (req, res) => {
-  const task = db
-        .prepare('SELECT * FROM tasks WHERE id = ?')
-        .get(req.params.id);
-      
-      if (!task) {
-      return res.status(404).json({
-      message: "Task not found"
-    });
-  }
+app.get('/tasks/:id', async (req, res) => {
+    try {
+        const result = await pool.query(
+            'SELECT * FROM tasks WHERE id = $1',
+            [req.params.id]
+        );
 
-  res.json(task);
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                error: "Task not found"
+            });
+        }
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error reading task:', error);
+        res.status(500).json({
+            error: 'Database error'
+        });
+    }
 });
 
 // CREATE task
