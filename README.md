@@ -1,46 +1,56 @@
-# Task API
+# Task API — Dockerized PostgreSQL Backend
 
-A simple RESTful Task API built with **Node.js**, **Express.js**, **SQLite**, and **Swagger UI** as part of the FlyRank AI Backend Engineering Internship.
+A RESTful Task API built with **Node.js**, **Express.js**, and **PostgreSQL**, with the complete application stack containerized using **Docker Compose**.
 
-This project demonstrates the fundamentals of backend API development, including RESTful CRUD operations, database integration, SQL queries, persistent data storage, and API documentation.
+This project extends the previous CRUD API by replacing the local SQLite/in-memory storage with a persistent PostgreSQL database and running both the API and database together through Docker.
 
 ## Features
 
 - RESTful API built with Express.js
-- Full CRUD operations for task management
-- SQLite database for persistent storage
-- Automatic database and table creation
-- Automatic seeding of three example tasks then added task
-- SQL-based data retrieval and modification
-- Interactive API documentation using Swagger UI
-- JSON request and response format
+- CRUD operations for task management
+- PostgreSQL database
+- PostgreSQL running inside Docker
+- Persistent PostgreSQL storage using a Docker volume
+- Environment-based database configuration
+- Parameterized SQL queries
+- Swagger UI for interactive API documentation
+- Docker Compose for running the complete stack
+- Database initialization and seed data
+- Data persistence across container restarts
 - HTTP status codes and error handling
-- Database remains available across server restarts
+
+---
 
 ## Technologies Used
 
 - Node.js
 - Express.js
-- SQLite
-- better-sqlite3
+- PostgreSQL
+- Docker
+- Docker Compose
+- `pg` (Node.js PostgreSQL driver)
+- dotenv
 - Swagger UI Express
-- YAML / OpenAPI
+- YAML
 
-## API Endpoints
+---
 
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/` | API information |
-| GET | `/health` | Health check |
-| GET | `/tasks` | Retrieve all tasks |
-| GET | `/tasks/{id}` | Retrieve a task by ID |
-| POST | `/tasks` | Create a new task |
-| PUT | `/tasks/{id}` | Update an existing task |
-| DELETE | `/tasks/{id}` | Delete a task |
+# Project Architecture
 
-## Database
+The application follows a simple layered structure:
 
-This project uses **SQLite** as its database.
-
-SQLite was chosen for this stage because it is lightweight, requires no separate database server, and stores the application data in a single database file.
-<img width="1080" height="923" alt="Screenshot 2026-08-09 232015" src="https://github.com/user-attachments/assets/8134ca95-510a-45f5-8287-05928948ee0a" />
+```text
+Client
+   │
+   │ HTTP Request
+   ▼
+Express API
+   │
+   ▼
+Database Module / Repository
+   │
+   ▼
+PostgreSQL
+   │
+   ▼
+Docker Volume
