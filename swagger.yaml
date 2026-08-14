@@ -1,22 +1,23 @@
-# OpenAPI 3.0.0 specification for Task API
-# This document defines the REST endpoints for managing tasks
+# OpenAPI 3.0 specification for Task API
 openapi: 3.0.0
 
 info:
-  title: Task API
+  title: Task API Test
   version: 1.0.0
   description: >
-    "A RESTful Task API built with Node.js, Express.js, and SQLite. 
-     The API supports CRUD operations with persistent task storage."
+    A RESTful Task API built with Node.js, Express.js, PostgreSQL, and Supabase Auth.
+    The API supports CRUD operations for tasks and user authentication.
 
-# Server configuration for local development
 servers:
   - url: http://localhost:3000
+    description: Local development server
 
-# API Endpoints
 paths:
 
-  # Root endpoint - API information
+  # =========================
+  # API INFORMATION
+  # =========================
+
   /:
     get:
       summary: API Information
@@ -25,18 +26,123 @@ paths:
         "200":
           description: API information returned successfully
 
-  # Task collection endpoints
+
+  # =========================
+  # HEALTH CHECK
+  # =========================
+
+  /health:
+    get:
+      summary: Health Check
+      description: Checks whether the API is running.
+      responses:
+        "200":
+          description: API is healthy
+
+
+  # =========================
+  # AUTHENTICATION
+  # =========================
+
+  /auth/signup:
+    post:
+      summary: Register a new user
+      description: Creates a new user account using Supabase Authentication.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: test@example.com
+
+                password:
+                  type: string
+                  format: password
+                  example: password123
+
+      responses:
+        "201":
+          description: User successfully registered
+
+        "400":
+          description: Email or password is missing or registration failed
+
+
+  /auth/login:
+    post:
+      summary: Log in a user
+      description: Authenticates a user using Supabase Authentication and returns access and refresh tokens.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: test@example.com
+
+                password:
+                  type: string
+                  format: password
+                  example: password123
+
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: JWT access token
+                    example: eyJhbGciOiJIUzI1NiIs...
+
+                  refresh_token:
+                    type: string
+                    description: Token used to refresh the session
+                    example: abc123...
+
+        "400":
+          description: Email or password is missing
+
+        "401":
+          description: Invalid login credentials
+
+
+  # =========================
+  # TASK COLLECTION
+  # =========================
+
   /tasks:
     get:
       summary: Get all tasks
-      description: Returns all tasks from the in-memory task list.
+      description: Returns all tasks stored in PostgreSQL.
       responses:
         "200":
           description: List of tasks returned successfully
 
     post:
       summary: Create a new task
-      description: Adds a new task to the in-memory task list.
+      description: Creates a new task in PostgreSQL.
+
       requestBody:
         required: true
         content:
@@ -49,46 +155,65 @@ paths:
                 title:
                   type: string
                   example: Build Candidate API
-                description:
-                  type: string
-                  example: Create CRUD endpoints for candidates.
-                priority:
-                  type: string
-                  example: High
-                completed:
-                  type: boolean
-                  example: false
+
+                done:
+                  type: integer
+                  description: Task completion status. Use 0 for incomplete and 1 for completed.
+                  example: 0
 
       responses:
         "201":
           description: Task created successfully
 
-  # Individual task endpoints - CRUD operations
+        "400":
+          description: Title is required
+
+        "500":
+          description: Database error
+
+
+  # =========================
+  # INDIVIDUAL TASK
+  # =========================
+
   /tasks/{id}:
-    # Retrieve a specific task by ID
+
     get:
       summary: Get a task by ID
+      description: Returns a single task from PostgreSQL.
+
       parameters:
         - name: id
           in: path
           required: true
+          description: ID of the task
           schema:
             type: integer
+          example: 1
+
       responses:
         "200":
           description: Task found
+
         "404":
           description: Task not found
 
-    # Update an existing task
+        "500":
+          description: Database error
+
+
     put:
       summary: Update a task
+      description: Updates an existing task in PostgreSQL.
+
       parameters:
         - name: id
           in: path
           required: true
+          description: ID of the task
           schema:
             type: integer
+          example: 1
 
       requestBody:
         required: true
@@ -99,31 +224,43 @@ paths:
               properties:
                 title:
                   type: string
-                description:
-                  type: string
-                priority:
-                  type: string
-                completed:
-                  type: boolean
+                  example: Build Candidate API
+
+                done:
+                  type: integer
+                  description: Task completion status. Use 0 for incomplete and 1 for completed.
+                  example: 1
 
       responses:
         "200":
           description: Task updated successfully
+
         "404":
           description: Task not found
 
-    # Remove a task from the collection
+        "500":
+          description: Database error
+
+
     delete:
       summary: Delete a task
+      description: Deletes an existing task from PostgreSQL.
+
       parameters:
         - name: id
           in: path
           required: true
+          description: ID of the task
           schema:
             type: integer
+          example: 1
 
       responses:
-        "200":
+        "204":
           description: Task deleted successfully
+
         "404":
           description: Task not found
+
+        "500":
+          description: Database error
