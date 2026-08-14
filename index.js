@@ -5,16 +5,14 @@ const YAML = require('yamljs');
 const app = express();
 const PORT = 3000;
 const { pool, initDatabase } = require('./db');
-//const openapi = YAML.load('./openapi.yaml');
+const supabase = require('./supabase');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use(express.json());
 
 app.use('/docs', swaggerUi.serve,swaggerUi.setup(swaggerDocument));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+
 app.get('/', (req, res) => {
   res.json({
     name: "Task API",
@@ -146,6 +144,7 @@ app.delete('/tasks/:id', async (req, res) => {
         });
     }
 });
+
 initDatabase()
     .then(() => {
         app.listen(PORT, () => {
