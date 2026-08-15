@@ -6,6 +6,7 @@ const app = express();
 const PORT = 3000;
 const { pool, initDatabase } = require('./db');
 const supabase = require('./supabase');
+const authMiddleware = require('./middleware');
 const swaggerDocument = YAML.load('./swagger.yaml');
 
 //console.log("Swagger title:", swaggerDocument.info.title);
@@ -40,40 +41,14 @@ app.get('/public/info', (req, res) => {
 
 
 // Protected route
-app.get('/protected/profile', async (req, res) => {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({
-            error: 'Access token required'
-        });
-    }
-
-    const token = authHeader.split(' ')[1];
-
-    try {
-        const { data, error } = await supabase.auth.getUser(token);
-
-        if (error || !data.user) {
-            return res.status(401).json({
-                error: 'Invalid or expired token'
-            });
-        }
-
-        res.status(200).json({
-            id: data.user.id,
-            email: data.user.email,
-            created_at: data.user.created_at
-        });
-
-    } catch (error) {
-        console.error(error);
-
-        res.status(500).json({
-            error: 'Authentication error'
-        });
-    }
+app.get('/protected/profile', authMiddleware, (req, res) => {
+    res.status(200).json({
+        id: req.user.id,
+        email: req.user.email,
+        created_at: req.user.created_at
+    });
 });
+// GET all tasks
 app.get('/tasks', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM tasks');
@@ -260,6 +235,37 @@ app.post('/auth/login', async (req, res) => {
         });
     }
 });
+//logout route
+app.post('/auth/logout', authMiddleware, async (req, res) => {
+    try {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+            return res.status(500).json({
+                error: error.message
+            });
+        }
+
+        res.status(204).send();
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: 'Logout failed'
+        });
+    }
+});
+app.get('/protected/dashboard', authMiddleware, (req, res) => {
+    res.status(200).json({
+        message: 'Welcome to the protected dashboard',
+        user: {
+            id: req.user.id,
+            email: req.user.email
+        }
+    });
+});
+// Initialize the database and start the server
 initDatabase()
     .then(() => {
         app.listen(PORT, () => {
