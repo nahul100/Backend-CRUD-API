@@ -36,3 +36,34 @@ The project started as a basic CRUD API and was gradually upgraded with persiste
 - **dotenv** — Loads environment variables from `.env`
 
 ---
+                 SIGN UP
+                    ↓
+              Create account
+                    ↓
+                 LOGIN
+                    ↓
+          email + password
+                    ↓
+                Supabase
+                    ↓
+              access_token
+                    ↓
+        ─────────────────────
+        Later API request
+        Authorization: Bearer token
+                    ↓
+             AUTH MIDDLEWARE
+                    ↓
+             Extract token
+                    ↓
+           Supabase verifies
+             ↙           ↘
+        Invalid          Valid
+           ↓               ↓
+         401          req.user = user
+                           ↓
+                         next()
+                           ↓
+                  PROTECTED ROUTE
+                           ↓
+                          200
