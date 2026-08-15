@@ -31,7 +31,36 @@ app.get('/health', (req, res) => {
     status: "ok"
   });
 });
+// Public route
+app.get('/public/info', (req, res) => {
+    res.status(200).json({
+        message: "Welcome stranger! This info is public."
+    });
+});
 
+
+// Protected route
+app.get('/protected/profile', (req, res) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(401).json({
+            error: "Access token required"
+        });
+    }
+
+    const parts = authHeader.split(' ');
+
+    if (parts.length !== 2 || parts[0] !== 'Bearer' || !parts[1]) {
+        return res.status(401).json({
+            error: "Access token required"
+        });
+    }
+
+    res.status(200).json({
+        message: "Protected profile accessed successfully"
+    });
+});
 app.get('/tasks', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM tasks');

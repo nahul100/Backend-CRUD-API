@@ -126,7 +126,38 @@ paths:
         "401":
           description: Invalid login credentials
 
+    # =========================
+  # PUBLIC & PROTECTED ROUTES
+  # =========================
 
+  /public/info:
+    get:
+      summary: Public information
+      description: Public endpoint that does not require authentication.
+      responses:
+        "200":
+          description: Public information returned successfully
+
+
+  /protected/profile:
+    get:
+      summary: Protected profile
+      description: Protected endpoint that requires a Bearer access token.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Access token in the format Bearer <token>
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIs...
+
+      responses:
+        "200":
+          description: Protected profile accessed successfully
+
+        "401":
+          description: Access token required
   # =========================
   # TASK COLLECTION
   # =========================
