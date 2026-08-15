@@ -40,26 +40,39 @@ app.get('/public/info', (req, res) => {
 
 
 // Protected route
-app.get('/protected/profile', (req, res) => {
+app.get('/protected/profile', async (req, res) => {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
-            error: "Access token required"
+            error: 'Access token required'
         });
     }
 
-    const parts = authHeader.split(' ');
+    const token = authHeader.split(' ')[1];
 
-    if (parts.length !== 2 || parts[0] !== 'Bearer' || !parts[1]) {
-        return res.status(401).json({
-            error: "Access token required"
+    try {
+        const { data, error } = await supabase.auth.getUser(token);
+
+        if (error || !data.user) {
+            return res.status(401).json({
+                error: 'Invalid or expired token'
+            });
+        }
+
+        res.status(200).json({
+            id: data.user.id,
+            email: data.user.email,
+            created_at: data.user.created_at
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: 'Authentication error'
         });
     }
-
-    res.status(200).json({
-        message: "Protected profile accessed successfully"
-    });
 });
 app.get('/tasks', async (req, res) => {
     try {

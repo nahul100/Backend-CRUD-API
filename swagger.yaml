@@ -151,6 +151,9 @@ paths:
           schema:
             type: string
             example: Bearer eyJhbGciOiJIUzI1NiIs...
+      
+      security:
+        - bearerAuth: []
 
       responses:
         "200":
@@ -295,3 +298,10 @@ paths:
 
         "500":
           description: Database error
+    
+    components:
+      securitySchemes:
+        bearerAuth:
+          type: http
+          scheme: bearer
+          bearerFormat: JWT
