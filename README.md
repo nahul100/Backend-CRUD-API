@@ -1,56 +1,38 @@
-# Task API — Dockerized PostgreSQL Backend
+# Backend CRUD API with Supabase Authentication
 
-A RESTful Task API built with **Node.js**, **Express.js**, and **PostgreSQL**, with the complete application stack containerized using **Docker Compose**.
+A RESTful Task API built with **Node.js, Express.js, PostgreSQL, Docker, and Supabase Authentication**.
 
-This project extends the previous CRUD API by replacing the local SQLite/in-memory storage with a persistent PostgreSQL database and running both the API and database together through Docker.
+The project started as a basic CRUD API and was gradually upgraded with persistent PostgreSQL storage, Docker-based deployment, and secure user authentication using Supabase.
 
-## Features
+---
 
-- RESTful API built with Express.js
-- CRUD operations for task management
+## 🚀 Features
+
+- RESTful CRUD operations for tasks
 - PostgreSQL database
-- PostgreSQL running inside Docker
-- Persistent PostgreSQL storage using a Docker volume
-- Environment-based database configuration
-- Parameterized SQL queries
-- Swagger UI for interactive API documentation
-- Docker Compose for running the complete stack
-- Database initialization and seed data
-- Data persistence across container restarts
-- HTTP status codes and error handling
+- Persistent database storage using Docker volumes
+- Docker Compose for running the application and database together
+- Environment-based configuration using `.env`
+- Swagger UI API documentation
+- User signup with Supabase Auth
+- User login with access and refresh tokens
+- JWT access-token verification
+- Public and protected API routes
+- Reusable authentication middleware
+- Protected dashboard endpoint
+- Protected logout endpoint
 
 ---
 
-## Technologies Used
+## 🛠️ Tech Stack
 
-- Node.js
-- Express.js
-- PostgreSQL
-- Docker
-- Docker Compose
-- `pg` (Node.js PostgreSQL driver)
-- dotenv
-- Swagger UI Express
-- YAML
+- **Node.js** — JavaScript runtime for the backend
+- **Express.js** — Web framework for building API routes
+- **PostgreSQL** — Relational database for persistent task storage
+- **Docker** — Runs the application and database in isolated containers
+- **Docker Compose** — Runs the complete stack together
+- **Supabase Auth** — Handles user authentication and JWTs
+- **Swagger / OpenAPI** — API documentation and testing
+- **dotenv** — Loads environment variables from `.env`
 
 ---
-
-# Project Architecture
-
-The application follows a simple layered structure:
-
-```text
-Client
-   │
-   │ HTTP Request
-   ▼
-Express API
-   │
-   ▼
-Database Module / Repository
-   │
-   ▼
-PostgreSQL
-   │
-   ▼
-Docker Volume
